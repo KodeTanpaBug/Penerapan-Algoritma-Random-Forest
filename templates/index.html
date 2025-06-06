@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Klasifikasi Gambar dengan Random Forest</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+     <!-- CSS custom -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container main-container">
+         <!-- Header -->
+        <div class="row mb-5">
+            <div class="col-12 text-center">
+                <!-- Icon di atas -->
+                <div class="mb-2">
+                    <i class="fas fa-brain fa-3x text-white"></i>
+                </div>
+                <!-- Judul lebih kecil -->
+                <h2 class="fw-bold text-white mb-2">
+                    Penerapan Algoritma Random Forest untuk Klasifikasi Gambar
+                </h2>
+                <p class="text-white-50">
+                    Upload gambar atau CSV data Anda dan biarkan algoritma Random Forest mengklasifikasikannya
+                </p>
+                <p class="text-white-50">
+                    INTAN TELAUMBANUA {301230016} TEKNIK INFORMATIKA 2023
+                </p>
+            </div>
+        </div>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="row mb-4">
+                    <div class="col-12">
+                        {% for message in messages %}
+                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <!-- Tab Content -->
+        <div class="tab-content" id="myTabContent">
+            <!-- Single Image Upload Tab -->
+            <div class="tab-pane fade show active" id="single" role="tabpanel">
+                <div class="row justify-content-center mb-5">
+                    <div class="col-lg-8">
+                        <div class="card upload-card border-0">
+                            <div class="card-body p-5">
+                                <h3 class="card-title text-center mb-4">
+                                    <i class="fas fa-upload me-2 text-primary"></i>
+                                    Upload Gambar untuk Klasifikasi
+                                </h3>
+                                
+                                <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data">
+                                    <div class="upload-area" id="uploadArea">
+                                        <div class="upload-icon">
+                                            <i class="fas fa-cloud-upload-alt"></i>
+                                        </div>
+                                        <h5>Drag & Drop gambar Anda di sini</h5>
+                                        <p class="text-muted mb-3">atau klik untuk memilih file</p>
+                                        <input type="file" class="form-control d-none" id="fileInput" name="file" accept="image/*" required>
+                                        <button type="button" class="btn btn-primary btn-upload" onclick="document.getElementById('fileInput').click()">
+                                            <i class="fas fa-folder-open me-2"></i>
+                                            Pilih Gambar
+                                        </button>
+                                        <div class="mt-3">
+                                            <small class="text-muted">
+                                                Format yang didukung: PNG, JPG, JPEG, GIF, BMP (Max: 16MB)
+                                            </small>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="preview-container" id="previewContainer" style="display: none;">
+                                        <h6>Preview Gambar:</h6>
+                                        <img id="previewImage" class="preview-image" alt="Preview">
+                                        <div class="mt-3">
+                                            <button type="submit" class="btn btn-success btn-lg">
+                                                <i class="fas fa-magic me-2"></i>
+                                                Klasifikasi Gambar
+                                            </button>
+                                            <button type="button" class="btn btn-secondary btn-lg ms-2" onclick="resetForm()">
+                                                <i class="fas fa-times me-2"></i>
+                                                Batal
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="loading text-center mt-4" id="loadingDiv">
+                                        <div class="spinner-border text-primary" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                        <p class="mt-3">Sedang memproses gambar...</p>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Batch Upload Tab -->
+            <div class="tab-pane fade" id="batch" role="tabpanel">
+                <div class="row justify-content-center mb-5">
+                    <div class="col-lg-8">
+                        <div class="card upload-card border-0">
+                            <div class="card-body p-5">
+                                <h3 class="card-title text-center mb-4">
+                                    <i class="fas fa-images me-2 text-success"></i>
+                                    Upload Multiple Gambar
+                                </h3>
+                                
+                                <form id="batchUploadForm" action="/batch_predict" method="post" enctype="multipart/form-data">
+                                    <div class="upload-area" id="batchUploadArea">
+                                        <div class="upload-icon">
+                                            <i class="fas fa-cloud-upload-alt"></i>
+                                        </div>
+                                        <h5>Pilih beberapa gambar sekaligus</h5>
+                                        <p class="text-muted mb-3">Ctrl+Click untuk memilih multiple file</p>
+                                        <input type="file" class="form-control d-none" id="batchFileInput" name="files" accept="image/*" multiple required>
+                                        <button type="button" class="btn btn-success btn-upload" onclick="document.getElementById('batchFileInput').click()">
+                                            <i class="fas fa-folder-open me-2"></i>
+                                            Pilih Multiple Gambar
+                                        </button>
+                                        <div class="mt-3">
+                                            <small class="text-muted">
+                                                Dapat memilih hingga 10 gambar sekaligus
+                                            </small>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="batch-preview-container" id="batchPreviewContainer" style="display: none;">
+                                        <h6>Preview Gambar yang Dipilih:</h6>
+                                        <div id="batchPreviewImages" class="row g-2 mb-3"></div>
+                                        <div class="text-center">
+                                            <button type="submit" class="btn btn-success btn-lg">
+                                                <i class="fas fa-magic me-2"></i>
+                                                Klasifikasi Semua Gambar
+                                            </button>
+                                            <button type="button" class="btn btn-secondary btn-lg ms-2" onclick="resetBatchForm()">
+                                                <i class="fas fa-times me-2"></i>
+                                                Batal
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="loading text-center mt-4" id="batchLoadingDiv">
+                                        <div class="spinner-border text-success" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                        <p class="mt-3">Sedang memproses multiple gambar...</p>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CSV Upload Tab -->
+            <div class="tab-pane fade" id="csv" role="tabpanel">
+                <div class="row justify-content-center mb-5">
+                    <div class="col-lg-8">
+                        <div class="card upload-card border-0">
+                            <div class="card-body p-5">
+                                <h3 class="card-title text-center mb-4">
+                                    <i class="fas fa-file-csv me-2 text-warning"></i>
+                                    Upload CSV Data untuk Training Model
+                                </h3>
+                                
+                                <div class="alert alert-info mb-4">
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    <strong>Format CSV yang diperlukan:</strong><br>
+                                    CSV harus memiliki kolom yang berisi path/URL gambar dan label klasifikasi.
+                                </div>
+                                
+                                <form id="csvUploadForm" action="/train_from_csv" method="post" enctype="multipart/form-data">
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <label for="imageColumn" class="form-label">Nama Kolom Gambar:</label>
+                                            <input type="text" class="form-control" id="imageColumn" name="image_column" value="image_path" placeholder="image_path">
+                                            <small class="text-muted">Nama kolom yang berisi path atau URL gambar</small>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="labelColumn" class="form-label">Nama Kolom Label:</label>
+                                            <input type="text" class="form-control" id="labelColumn" name="label_column" value="label" placeholder="label">
+                                            <small class="text-muted">Nama kolom yang berisi label klasifikasi</small>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="upload-area" id="csvUploadArea">
+                                        <div class="upload-icon">
+                                            <i class="fas fa-file-csv fa-3x text-warning"></i>
+                                        </div>
+                                        <h5>Upload File CSV</h5>
+                                        <p class="text-muted mb-3">File CSV dengan data gambar dan label</p>
+                                        <input type="file" class="form-control d-none" id="csvFileInput" name="csv_file" accept=".csv" required>
+                                        <button type="button" class="btn btn-warning btn-upload" onclick="document.getElementById('csvFileInput').click()">
+                                            <i class="fas fa-folder-open me-2"></i>
+                                            Pilih File CSV
+                                        </button>
+                                        <div class="mt-3">
+                                            <small class="text-muted">
+                                                Format: .csv (Max: 16MB)
+                                            </small>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="csv-preview-container" id="csvPreviewContainer" style="display: none;">
+                                        <h6>File CSV yang Dipilih:</h6>
+                                        <div class="alert alert-light">
+                                            <i class="fas fa-file-csv me-2"></i>
+                                            <span id="csvFileName"></span>
+                                        </div>
+                                        <div class="text-center">
+                                            <button type="submit" class="btn btn-warning btn-lg">
+                                                <i class="fas fa-cogs me-2"></i>
+                                                Train Model dari CSV
+                                            </button>
+                                            <button type="button" class="btn btn-secondary btn-lg ms-2" onclick="resetCsvForm()">
+                                                <i class="fas fa-times me-2"></i>
+                                                Batal
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="loading text-center mt-4" id="csvLoadingDiv">
+                                        <div class="spinner-border text-warning" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                        <p class="mt-3">Sedang memproses CSV dan training model...</p>
+                                        <small class="text-muted">Proses ini dapat memakan waktu beberapa menit tergantung ukuran data</small>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon text-primary">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h5>Random Forest AI</h5>
+                    <p class="text-muted">
+                        Menggunakan algoritma Random Forest yang powerful untuk klasifikasi gambar yang akurat
+                    </p>
+                </div>
+            </div>
+           <div class="col-md-4">
+            <div class="feature-card">
+                <div class="feature-icon text-success">
+                    ⚡
+                </div>
+                <h5>Pemrosesan Cepat </h5>
+                <p class="text-muted">
+                    Analisis gambar dalam hitungan detik dengan ekstraksi fitur otomatis
+                </p>
+            </div>
+        </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon text-warning">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h5>Tingkat Akurasi Tinggi</h5>
+                    <p class="text-muted">
+                        Memberikan hasil prediksi dengan tingkat kepercayaan yang dapat diandalkan
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Single Image Upload Functions
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const previewContainer = document.getElementById('previewContainer');
+        const previewImage = document.getElementById('previewImage');
+        const uploadForm = document.getElementById('uploadForm');
+        const loadingDiv = document.getElementById('loadingDiv');
+
+        // Batch Upload Elements
+        const batchUploadArea = document.getElementById('batchUploadArea');
+        const batchFileInput = document.getElementById('batchFileInput');
+        const batchPreviewContainer = document.getElementById('batchPreviewContainer');
+        const batchUploadForm = document.getElementById('batchUploadForm');
+        const batchLoadingDiv = document.getElementById('batchLoadingDiv');
+
+        // CSV Upload Elements
+        const csvUploadArea = document.getElementById('csvUploadArea');
+        const csvFileInput = document.getElementById('csvFileInput');
+        const csvPreviewContainer = document.getElementById('csvPreviewContainer');
+        const csvUploadForm = document.getElementById('csvUploadForm');
+        const csvLoadingDiv = document.getElementById('csvLoadingDiv');
+
+        // Single Image Drag and Drop
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                fileInput.files = files;
+                handleFileSelect(files[0]);
+            }
+        });
+
+        // File input change events
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFileSelect(e.target.files[0]);
+            }
+        });
+
+        batchFileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleBatchFileSelect(e.target.files);
+            }
+        });
+
+        csvFileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleCsvFileSelect(e.target.files[0]);
+            }
+        });
+
+        // Handle single file selection
+        function handleFileSelect(file) {
+            if (!validateImageFile(file)) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                previewImage.src = e.target.result;
+                previewContainer.style.display = 'block';
+                uploadArea.style.display = 'none';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Handle batch file selection
+        function handleBatchFileSelect(files) {
+            if (files.length > 10) {
+                alert('Maksimal 10 gambar dapat dipilih sekaligus.');
+                return;
+            }
+
+            const previewImages = document.getElementById('batchPreviewImages');
+            previewImages.innerHTML = '';
+
+            let validFiles = 0;
+            for (let i = 0; i < files.length; i++) {
+                if (validateImageFile(files[i])) {
+                    validFiles++;
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const col = document.createElement('div');
+                        col.className = 'col-md-3 col-sm-4 col-6';
+                        col.innerHTML = `
+                            <div class="card">
+                                <img src="${e.target.result}" class="card-img-top" style="height: 100px; object-fit: cover;" alt="Preview">
+                                <div class="card-body p-2">
+                                    <small class="text-muted">${files[i].name}</small>
+                                </div>
+                            </div>
+                        `;
+                        previewImages.appendChild(col);
+                    };
+                    reader.readAsDataURL(files[i]);
+                }
+            }
+
+            if (validFiles > 0) {
+                batchPreviewContainer.style.display = 'block';
+                batchUploadArea.style.display = 'none';
+            }
+        }
+
+        // Handle CSV file selection
+        function handleCsvFileSelect(file) {
+            if (!file.name.toLowerCase().endsWith('.csv')) {
+                alert('File harus berformat CSV.');
+                return;
+            }
+
+            if (file.size > 16 * 1024 * 1024) {
+                alert('Ukuran file terlalu besar. Maksimal 16MB.');
+                return;
+            }
+
+            document.getElementById('csvFileName').textContent = file.name;
+            csvPreviewContainer.style.display = 'block';
+            csvUploadArea.style.display = 'none';
+        }
+
+        // Validate image file
+        function validateImageFile(file) {
+            const allowedTypes = ['image/png', 'image/jpg', 'image/jpeg', 'image/gif', 'image/bmp'];
+            if (!allowedTypes.includes(file.type)) {
+                alert('Tipe file tidak didukung. Silakan pilih gambar PNG, JPG, JPEG, GIF, atau BMP.');
+                return false;
+            }
+
+            if (file.size > 16 * 1024 * 1024) {
+                alert('Ukuran file terlalu besar. Maksimal 16MB.');
+                return false;
+            }
+
+            return true;
+        }
+
+        // Reset functions
+        function resetForm() {
+            fileInput.value = '';
+            previewContainer.style.display = 'none';
+            uploadArea.style.display = 'block';
+            loadingDiv.style.display = 'none';
+        }
+
+        function resetBatchForm() {
+            batchFileInput.value = '';
+            batchPreviewContainer.style.display = 'none';
+            batchUploadArea.style.display = 'block';
+            batchLoadingDiv.style.display = 'none';
+        }
+
+        function resetCsvForm() {
+            csvFileInput.value = '';
+            csvPreviewContainer.style.display = 'none';
+            csvUploadArea.style.display = 'block';
+            csvLoadingDiv.style.display = 'none';
+        }
+
+        // Form submissions
+        uploadForm.addEventListener('submit', (e) => {
+            if (fileInput.files.length === 0) {
+                e.preventDefault();
+                alert('Silakan pilih gambar terlebih dahulu.');
+                return;
+            }
+            loadingDiv.style.display = 'block';
+            previewContainer.style.display = 'none';
+        });
+
+        batchUploadForm.addEventListener('submit', (e) => {
+            if (batchFileInput.files.length === 0) {
+                e.preventDefault();
+                alert('Silakan pilih gambar terlebih dahulu.');
+                return;
+            }
+            batchLoadingDiv.style.display = 'block';
+            batchPreviewContainer.style.display = 'none';
+        });
+
+        csvUploadForm.addEventListener('submit', (e) => {
+            if (csvFileInput.files.length === 0) {
+                e.preventDefault();
+                alert('Silakan pilih file CSV terlebih dahulu.');
+                return;
+            }
+            csvLoadingDiv.style.display = 'block';
+            csvPreviewContainer.style.display = 'none';
+        });
+
+        // Click areas to upload
+        uploadArea.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        batchUploadArea.addEventListener('click', () => {
+            batchFileInput.click();
+        });
+
+        csvUploadArea.addEventListener('click', () => {
+            csvFileInput.click();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,709 @@
+/* CSS Ultra Modern dengan Warna Spektakuler */
+:root {
+    --electric-blue: #ff6b93; /* Coral pink yang vibrant */
+    --neon-purple: #f0fff4; /* Mint cream */
+    --hot-pink: #ffd1dc; /* Light pink */
+    --lime-green: #8fbc8f; /* Dark sea green */
+    --sunset-orange: #ff69b4; /* Hot pink */
+    --aurora-purple: #ffb6c1; /* Light pink */
+    --cyber-cyan: #40e0d0; /* Turquoise */
+    --royal-blue: #ffeaa7; /* Peach puff */
+    --golden-yellow: #ffd700; /* Gold */
+    --rose-pink: #f08080; /* Light coral */
+    --emerald: #20b2aa; /* Light sea green */
+    --violet: #dda0dd; /* Plum */
+    
+    /* Gradients */
+    --gradient-rainbow: linear-gradient(135deg, #ff6b93 0%, #ffb6c1 25%, #40e0d0 50%, #ffd700 75%, #20b2aa 100%);
+    --gradient-sunset: linear-gradient(135deg, #ff69b4 0%, #ffd700 50%, #ff6b93 100%);
+    --gradient-ocean: linear-gradient(135deg, #40e0d0 0%, #20b2aa 100%);
+    --gradient-aurora: linear-gradient(135deg, #f0fff4 0%, #ffd1dc 50%, #ffb6c1 100%);
+    --gradient-cyber: linear-gradient(135deg, #ffd700 0%, #40e0d0 50%, #ff6b93 100%);
+    --gradient-fire: linear-gradient(135deg, #ff69b4 0%, #ffd1dc 50%, #f0fff4 100%);
+    --gradient-magic: linear-gradient(135deg, #40e0d0 0%, #ffd700 25%, #ff6b93 50%, #20b2aa 75%, #ffb6c1 100%);
+    
+   /* Shadows with color */
+--shadow-rainbow: 0 20px 60px rgba(255, 215, 0, 0.4);
+--shadow-neon: 0 0 30px rgba(64, 224, 208, 0.6);
+--shadow-cyber: 0 20px 40px rgba(32, 178, 170, 0.3);
+--glow-pink: 0 0 20px rgba(255, 107, 147, 0.5);
+--glow-cyan: 0 0 30px rgba(64, 224, 208, 0.6);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+    background: var(--gradient-rainbow);
+    min-height: 100vh;
+    color: #1a1a2e;
+    position: relative;
+    overflow-x: hidden;
+    animation: backgroundShift 15s ease-in-out infinite;
+}
+
+@keyframes backgroundShift {
+    0%, 100% { background: var(--gradient-rainbow); }
+    25% { background: var(--gradient-cyber); }
+    50% { background: var(--gradient-aurora); }
+    75% { background: var(--gradient-magic); }
+}
+
+/* Floating particles background */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(circle at 10% 20%, rgba(255, 105, 180, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 90% 80%, rgba(64, 224, 208, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 30% 70%, rgba(32, 178, 170, 0.12) 0%, transparent 50%),
+        radial-gradient(circle at 80% 30%, rgba(255, 107, 147, 0.12) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: -1;
+    animation: particleFloat 20s linear infinite;
+}
+
+@keyframes particleFloat {
+    0%, 100% { transform: translateX(0) translateY(0) rotate(0deg); }
+    25% { transform: translateX(20px) translateY(-20px) rotate(90deg); }
+    50% { transform: translateX(-10px) translateY(10px) rotate(180deg); }
+    75% { transform: translateX(-20px) translateY(-10px) rotate(270deg); }
+}
+
+/* Animated mesh background */
+body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        linear-gradient(45deg, transparent 48%, rgba(255, 255, 255, 0.05) 50%, transparent 52%),
+        linear-gradient(-45deg, transparent 48%, rgba(255, 255, 255, 0.05) 50%, transparent 52%);
+    background-size: 30px 30px;
+    pointer-events: none;
+    z-index: -1;
+    animation: meshMove 10s linear infinite;
+}
+
+@keyframes meshMove {
+    0% { background-position: 0 0, 0 0; }
+    100% { background-position: 30px 30px, -30px 30px; }
+}
+
+.main-container {
+    position: relative;
+    z-index: 1;
+    padding: 2rem 1rem;
+}
+
+/* Header dengan efek neon */
+.display-4 {
+    color: #ffffff !important;
+    text-shadow: 
+        0 0 10px rgba(255, 255, 255, 0.8),
+        0 0 20px rgba(64, 224, 208, 0.6),
+        0 0 30px rgba(255, 107, 147, 0.4);
+    animation: textGlow 3s ease-in-out infinite alternate, slideInDown 1s ease-out;
+    font-weight: 900;
+    letter-spacing: 2px;
+}
+
+@keyframes textGlow {
+    from {
+        text-shadow: 
+            0 0 10px rgba(255, 255, 255, 0.8),
+            0 0 20px rgba(64, 224, 208, 0.6),
+            0 0 30px rgba(255, 107, 147, 0.4);
+    }
+    to {
+        text-shadow: 
+            0 0 20px rgba(255, 255, 255, 1),
+            0 0 30px rgba(255, 215, 0, 0.8),
+            0 0 40px rgba(32, 178, 170, 0.6),
+            0 0 50px rgba(255, 105, 180, 0.4);
+    }
+}
+.lead {
+    color: rgba(255, 255, 255, 0.95) !important;
+    animation: slideInUp 1s ease-out 0.3s both;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    font-weight: 500;
+}
+
+/* Animasi yang lebih dinamis */
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-50px) scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes rainbowPulse {
+    0% { transform: scale(1) rotate(0deg); }
+    25% { transform: scale(1.05) rotate(2deg); }
+    50% { transform: scale(1.1) rotate(0deg); }
+    75% { transform: scale(1.05) rotate(-2deg); }
+    100% { transform: scale(1) rotate(0deg); }
+}
+
+@keyframes holographicShine {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+/* Alert dengan style futuristik */
+.alert-warning {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.9), rgba(255, 182, 193, 0.9));
+    border: 2px solid var(--golden-yellow);
+    color: #1a1a2e;
+    border-radius: 20px;
+    box-shadow: var(--glow-pink), 0 10px 30px rgba(255, 215, 0, 0.3);
+    backdrop-filter: blur(10px);
+    animation: alertPulse 2s ease-in-out infinite;
+}
+
+@keyframes alertPulse {
+    0%, 100% { box-shadow: var(--glow-pink), 0 10px 30px rgba(255, 215, 0, 0.3); }
+    50% { box-shadow: var(--glow-cyan), 0 15px 40px rgba(64, 224, 208, 0.4); }
+}
+
+/* Upload Card dengan glassmorphism ekstrem */
+.upload-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 30px;
+    box-shadow: 
+        var(--shadow-rainbow),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    animation: cardFloat 6s ease-in-out infinite, slideInUp 1s ease-out 0.6s both;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+}
+
+@keyframes cardFloat {
+    0%, 100% { transform: translateY(0) rotateX(0deg); }
+    50% { transform: translateY(-10px) rotateX(5deg); }
+}
+
+.upload-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.6s ease;
+    z-index: 1;
+}
+
+.upload-card:hover::before {
+    left: 100%;
+}
+
+.upload-card:hover {
+    transform: translateY(-15px) scale(1.02);
+    box-shadow: 
+        var(--shadow-neon),
+        var(--shadow-cyber),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    border-color: rgba(64, 224, 208, 0.5);
+}
+
+.card-title {
+    color: #ffffff;
+    font-weight: 800;
+    text-shadow: 0 2px 10px rgba(255, 107, 147, 0.5);
+    position: relative;
+    z-index: 2;
+}
+
+.card-title i {
+    background: var(--gradient-cyber);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: rainbowPulse 3s ease-in-out infinite;
+}
+
+/* Upload Area dengan efek hologram */
+.upload-area {
+    border: 3px dashed transparent;
+    border-radius: 25px;
+    padding: 3rem 2rem;
+    text-align: center;
+    background: 
+        linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)),
+        linear-gradient(135deg, #40e0d0, #ffd1dc);
+    background-size: 100% 100%, 200% 200%;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(15px);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.upload-area::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: var(--gradient-cyber);
+    border-radius: 25px;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.upload-area:hover::before {
+    opacity: 1;
+    animation: holographicShine 2s linear infinite;
+}
+
+.upload-area:hover {
+    transform: scale(1.05) perspective(1000px) rotateX(5deg);
+    background-size: 100% 100%, 100% 100%;
+    box-shadow: 
+        var(--glow-cyan),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.upload-area.dragover {
+    animation: dragPulse 1s ease-in-out infinite;
+    background: var(--gradient-fire);
+    transform: scale(1.1);
+}
+
+@keyframes dragPulse {
+    0%, 100% { 
+        box-shadow: var(--glow-pink);
+        transform: scale(1.1);
+    }
+    50% { 
+        box-shadow: var(--glow-cyan), var(--shadow-neon);
+        transform: scale(1.15);
+    }
+}
+
+/* Icon upload yang tenang - tanpa animasi spinning */
+.upload-icon {
+    font-size: 4.5rem;
+    background: var(--gradient-sunset);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 1rem;
+    display: inline-block;
+    /* Menghapus animasi iconSpin untuk membuat icon tenang */
+    transition: all 0.3s ease;
+}
+
+/* Efek hover ringan untuk icon upload */
+.upload-area:hover .upload-icon {
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 10px rgba(255, 107, 147, 0.5));
+}
+
+.upload-area h5 {
+    color: #ffffff;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Buttons dengan efek spektakuler */
+.btn-upload {
+    background: var(--gradient-sunset);
+    background-size: 200% 200%;
+    border: none;
+    border-radius: 50px;
+    padding: 1rem 2.5rem;
+    font-weight: 700;
+    color: white;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: var(--glow-pink);
+    position: relative;
+    overflow: hidden;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.btn-upload::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+.btn-upload:hover::before {
+    left: 100%;
+}
+
+.btn-upload:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: var(--glow-cyan), var(--shadow-neon);
+    background-position: 100% 0;
+    animation: buttonPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes buttonPulse {
+    0%, 100% { box-shadow: var(--glow-cyan), var(--shadow-neon); }
+    50% { box-shadow: var(--glow-pink), var(--shadow-rainbow); }
+}
+
+.btn-success {
+    background: var(--gradient-cyber);
+    background-size: 200% 200%;
+    border: none;
+    border-radius: 50px;
+    padding: 1rem 2.5rem;
+    font-weight: 700;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: var(--shadow-cyber);
+    color: #1a1a2e;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.btn-success:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: var(--glow-cyan), 0 20px 40px rgba(64, 224, 208, 0.4);
+    background-position: 100% 0;
+    color: #ffffff;
+}
+
+.btn-secondary {
+    background: linear-gradient(135deg, #40e0d0, #20b2aa);
+    background-size: 200% 200%;
+    border: none;
+    border-radius: 50px;
+    padding: 1rem 2.5rem;
+    font-weight: 700;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 10px 30px rgba(64, 224, 208, 0.4);
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.btn-secondary:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: var(--shadow-rainbow);
+    background-position: 100% 0;
+}
+
+/* Preview Image dengan frame hologram */
+.preview-container {
+    text-align: center;
+    animation: slideInUp 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.preview-image {
+    max-width: 100%;
+    max-height: 350px;
+    border-radius: 20px;
+    box-shadow: 
+        var(--shadow-neon),
+        0 0 0 4px rgba(255, 255, 255, 0.1);
+    border: 4px solid transparent;
+    background: var(--gradient-rainbow);
+    background-clip: padding-box;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    animation: imageFloat 4s ease-in-out infinite;
+}
+
+@keyframes imageFloat {
+    0%, 100% { transform: translateY(0) rotateY(0deg); }
+    50% { transform: translateY(-8px) rotateY(5deg); }
+}
+
+.preview-image:hover {
+    transform: scale(1.05) rotateY(10deg);
+    box-shadow: 
+        var(--glow-cyan),
+        var(--shadow-rainbow),
+        0 0 0 6px rgba(255, 255, 255, 0.2);
+}
+
+/* Loading dengan rainbow spinner */
+.loading {
+    display: none;
+    animation: slideInUp 0.5s ease-out;
+}
+
+.spinner-border {
+    width: 4rem;
+    height: 4rem;
+    border-width: 0.4rem;
+    border-color: transparent;
+    border-top-color: var(--electric-blue);
+    border-right-color: var(--hot-pink);
+    border-bottom-color: var(--cyber-cyan);
+    border-left-color: var(--golden-yellow);
+    animation: rainbowSpin 1s linear infinite;
+}
+
+@keyframes rainbowSpin {
+    0% {
+        transform: rotate(0deg);
+        border-top-color: var(--electric-blue);
+        border-right-color: var(--hot-pink);
+        border-bottom-color: var(--cyber-cyan);
+        border-left-color: var(--golden-yellow);
+    }
+    25% {
+        border-top-color: var(--hot-pink);
+        border-right-color: var(--cyber-cyan);
+        border-bottom-color: var(--golden-yellow);
+        border-left-color: var(--electric-blue);
+    }
+    50% {
+        border-top-color: var(--cyber-cyan);
+        border-right-color: var(--golden-yellow);
+        border-bottom-color: var(--electric-blue);
+        border-left-color: var(--hot-pink);
+    }
+    75% {
+        border-top-color: var(--golden-yellow);
+        border-right-color: var(--electric-blue);
+        border-bottom-color: var(--hot-pink);
+        border-left-color: var(--cyber-cyan);
+    }
+    100% {
+        transform: rotate(360deg);
+        border-top-color: var(--electric-blue);
+        border-right-color: var(--hot-pink);
+        border-bottom-color: var(--cyber-cyan);
+        border-left-color: var(--golden-yellow);
+    }
+}
+
+/* Feature Cards dengan efek 3D */
+.feature-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 25px;
+    padding: 2.5rem 2rem;
+    text-align: center;
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 
+        0 15px 35px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    animation: slideInUp 1s ease-out calc(0.9s + var(--delay, 0s)) both;
+    position: relative;
+    overflow: hidden;
+    transform-style: preserve-3d;
+}
+
+.feature-card:nth-child(1) { 
+    --delay: 0s; 
+    background: linear-gradient(135deg, rgba(255, 105, 180, 0.1), rgba(255, 215, 0, 0.1));
+}
+.feature-card:nth-child(2) { 
+    --delay: 0.2s; 
+    background: linear-gradient(135deg, rgba(64, 224, 208, 0.1), rgba(32, 178, 170, 0.1));
+}
+.feature-card:nth-child(3) { 
+    --delay: 0.4s; 
+    background: linear-gradient(135deg, rgba(255, 107, 147, 0.1), rgba(255, 182, 193, 0.1));
+}
+
+.feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.6s ease;
+    z-index: 1;
+}
+
+.feature-card:hover::before {
+    left: 100%;
+}
+
+.feature-card:hover {
+    transform: translateY(-20px) rotateX(15deg) rotateY(5deg) scale(1.05);
+    border-color: rgba(64, 224, 208, 0.5);
+    box-shadow: 
+        var(--shadow-neon),
+        var(--glow-cyan),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.feature-icon {
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    z-index: 2;
+    display: inline-block;
+}
+
+.feature-card:nth-child(1) .feature-icon {
+    background: var(--gradient-sunset);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.feature-card:nth-child(2) .feature-icon {
+    background: var(--gradient-cyber);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.feature-card:nth-child(3) .feature-icon {
+    background: var(--gradient-fire);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.feature-card:hover .feature-icon {
+    transform: scale(1.3) rotateY(360deg);
+    filter: drop-shadow(0 0 20px rgba(64, 224, 208, 0.8));
+}
+
+.feature-card h5 {
+    color: #ffffff;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    position: relative;
+    z-index: 2;
+}
+
+.feature-card p {
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.7;
+    position: relative;
+    z-index: 2;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive dengan animasi */
+@media (max-width: 768px) {
+    .main-container {
+        padding: 1rem;
+    }
+    
+    .upload-area {
+        padding: 2rem 1rem;
+    }
+    
+    .upload-icon {
+        font-size: 3.5rem;
+    }
+    
+    .display-4 {
+        font-size: 2.5rem;
+    }
+    
+    .feature-card {
+        margin-bottom: 2rem;
+        transform: none;
+    }
+    
+    .feature-card:hover {
+        transform: translateY(-10px) scale(1.02);
+    }
+}
+
+@media (max-width: 576px) {
+    .upload-area {
+        padding: 1.5rem 1rem;
+        border-radius: 20px;
+    }
+    
+    .btn-upload, .btn-success, .btn-secondary {
+        padding: 0.8rem 2rem;
+        font-size: 0.9rem;
+    }
+    
+    .display-4 {
+        font-size: 2rem;
+        letter-spacing: 1px;
+    }
+    
+    .upload-card {
+        border-radius: 20px;
+    }
+}
+
+/* Efek khusus untuk interaksi */
+@media (hover: hover) {
+    .upload-area:hover {
+        animation: hologramGlow 2s ease-in-out infinite;
+    }
+}
+
+@keyframes hologramGlow {
+    0%, 100% {
+        box-shadow: 
+            var(--glow-cyan),
+            inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    }
+    33% {
+        box-shadow: 
+            var(--glow-pink),
+            inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    }
+    66% {
+        box-shadow: 
+            var(--shadow-neon),
+            inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    }
+}
+
+/* Dark mode enhancement */
+@media (prefers-color-scheme: dark) {
+    .upload-card {
+        background: rgba(0, 0, 0, 0.2);
+        border-color: rgba(255, 255, 255, 0.3);
+    }
+    
+    .feature-card {
+        background: rgba(0, 0, 0, 0.2);
+        border-color: rgba(255, 255, 255, 0.3);
+    }
+}

@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hasil Klasifikasi - Random Forest AI</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+     <!-- CSS Result -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='result.css') }}">
+</head>
+<body>
+    <div class="container main-container">
+             <!-- Header -->
+            <div class="row mb-4">
+            <div class="col-12 text-center">
+                <h1 class="display-5 text-white fw-bold mb-3 fade-in">
+                    🌿 Hasil Klasifikasi
+                </h1>
+                <p class="lead text-white-50 fade-in">
+                    Analisis gambar telah selesai dengan Random Forest AI
+                </p>
+            </div>
+        </div>
+
+        <!-- Main Result Card -->
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="card result-card border-0 fade-in">
+                    <div class="card-body p-0">
+                        <div class="row g-0">
+                            <!-- Image Section -->
+                            <div class="col-md-6">
+                                <div class="image-container">
+                                    <h5 class="mb-3">
+                                        <i class="fas fa-image me-2 text-primary"></i>
+                                        Gambar yang Dianalisis
+                                    </h5>
+                                    
+                                    <!-- Improved Image Display with Error Handling -->
+                                    <div class="image-wrapper">
+                                        {% if result.image %}
+                                            <!-- Handle different image formats -->
+                                            {% if result.image.startswith('/9j/') or result.image.startswith('iVBOR') or result.image.startswith('R0lGOD') %}
+                                                <img src="data:image/jpeg;base64,{{ result.image }}" 
+                                                     alt="Uploaded Image" 
+                                                     class="uploaded-image"
+                                                     onerror="handleImageError(this)"
+                                                     onload="handleImageLoad(this)">
+                                            {% elif result.image.startswith('data:image/') %}
+                                                <img src="{{ result.image }}" 
+                                                     alt="Uploaded Image" 
+                                                     class="uploaded-image"
+                                                     onerror="handleImageError(this)"
+                                                     onload="handleImageLoad(this)">
+                                            {% else %}
+                                                <!-- Try different formats -->
+                                                <img src="data:image/png;base64,{{ result.image }}" 
+                                                     alt="Uploaded Image" 
+                                                     class="uploaded-image"
+                                                     onerror="tryAlternativeFormats(this, '{{ result.image }}')"
+                                                     onload="handleImageLoad(this)">
+                                            {% endif %}
+                                        {% else %}
+                                            <div class="no-image-placeholder">
+                                                <i class="fas fa-image fa-3x text-muted"></i>
+                                                <p class="text-muted mt-2">Gambar tidak tersedia</p>
+                                            </div>
+                                        {% endif %}
+                                        
+                                        <!-- Loading indicator -->
+                                        <div class="image-loading" id="imageLoading">
+                                            <div class="spinner-border text-primary" role="status">
+                                                <span class="visually-hidden">Loading...</span>
+                                            </div>
+                                            <p class="mt-2">Memuat gambar...</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mt-3">
+                                        <small class="text-muted">
+                                            <i class="fas fa-file me-1"></i>
+                                            {{ result.filename if result.filename else 'Unknown File' }}
+                                        </small>
+                                        {% if result.image_size %}
+                                        <br>
+                                        <small class="text-muted">
+                                            <i class="fas fa-expand-arrows-alt me-1"></i>
+                                            {{ result.image_size }}
+                                        </small>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Result Section -->
+                            <div class="col-md-6">
+                                <div class="result-content">
+                                    <h4 class="gradient-text mb-4">
+                                        <i class="fas fa-brain me-2"></i>
+                                        Hasil Prediksi AI
+                                    </h4>
+                                    
+                                    <!-- Prediction Result -->
+                                    <div class="text-center mb-4">
+                                        <div class="icon-large text-success">
+                                            <i class="fas fa-bullseye"></i>
+                                        </div>
+                                        <div class="prediction-badge">
+                                            {{ result.prediction if result.prediction else 'Tidak diketahui' }}
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Confidence Level -->
+                                    <div class="stats-card">
+                                        <h6 class="mb-3">
+                                            <i class="fas fa-chart-line me-2 text-info"></i>
+                                            Tingkat Keyakinan
+                                        </h6>
+                                        <div class="confidence-bar mb-2" id="confidenceBar">
+                                            <div class="confidence-text">{{ result.confidence if result.confidence else 0 }}%</div>
+                                        </div>
+                                        <div class="d-flex justify-content-between">
+                                            <small class="text-muted">0%</small>
+                                            <small class="text-muted">100%</small>
+                                        </div>
+                                        
+                                        <!-- Confidence Level Description -->
+                                        <div class="mt-3">
+                                        {% set confidence_value = result.confidence|float if result.confidence else 0 %}
+                                        {% if confidence_value > 100 %} {% set confidence_value = 100 %} {% elif confidence_value < 0 %} {% set confidence_value = 0 %} {% endif %}
+
+                                        {% if confidence_value >= 75 %}
+                                            <div class="alert alert-success d-flex align-items-center" role="alert" aria-label="Sangat Yakin">
+                                            <i class="fas fa-check-circle me-2"></i>
+                                            <div>
+                                                <strong>Sangat Yakin</strong><br>
+                                                Model sangat yakin terhadap prediksi ini
+                                            </div>
+                                            </div>
+                                        {% elif confidence_value >= 50 %}
+                                            <div class="alert alert-info d-flex align-items-center" role="alert" aria-label="Cukup Yakin">
+                                            <i class="fas fa-info-circle me-2"></i>
+                                            <div>
+                                                <strong>Cukup Yakin</strong><br>
+                                                Model memiliki keyakinan yang baik terhadap prediksi ini
+                                            </div>
+                                            </div>
+                                        {% elif confidence_value >= 25 %}
+                                            <div class="alert alert-warning d-flex align-items-center" role="alert" aria-label="Cukup Ragu">
+                                            <i class="fas fa-exclamation-triangle me-2"></i>
+                                            <div>
+                                                <strong>Cukup Ragu</strong><br>
+                                                Model cukup ragu terhadap prediksi ini
+                                            </div>
+                                            </div>
+                                        {% else %}
+                                            <div class="alert alert-danger d-flex align-items-center" role="alert" aria-label="Kurang Yakin">
+                                            <i class="fas fa-times-circle me-2"></i>
+                                            <div>
+                                                <strong>Kurang Yakin</strong><br>
+                                                Model kurang percaya dengan prediksi ini
+                                            </div>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                    
+                                    <!-- Analysis Details -->
+                                    <div class="stats-card">
+                                        <h6 class="mb-3">
+                                            <i class="fas fa-cogs me-2 text-secondary"></i>
+                                            Detail Analisis
+                                        </h6>
+                                        <div class="row text-center">
+                                            <div class="col-6">
+                                                <div class="border-end">
+                                                    <h5 class="text-primary mb-1">Random Forest</h5>
+                                                    <small class="text-muted">Algoritma</small>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <h5 class="text-success mb-1">{{ result.features_count if result.features_count else '176' }}</h5>
+                                                <small class="text-muted">Fitur Ekstrak</small>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Additional processing info -->
+                                        {% if result.processing_time %}
+                                        <div class="row text-center mt-3">
+                                            <div class="col-12">
+                                                <small class="text-muted">
+                                                    <i class="fas fa-clock me-1"></i>
+                                                    Waktu Proses: {{ result.processing_time }}ms
+                                                </small>
+                                            </div>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <!-- Action Buttons -->
+                                    <div class="text-center mt-4">
+                                        <a href="{{ url_for('index') }}" class="btn btn-primary btn-custom">
+                                            <i class="fas fa-upload me-2"></i>
+                                            Analisis Gambar Lain
+                                        </a>
+                                        <button class="btn btn-success btn-custom" onclick="downloadResult()">
+                                            <i class="fas fa-download me-2"></i>
+                                            Unduh Hasil
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Additional Information -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="card result-card border-0 fade-in">
+                    <div class="card-body p-4">
+                        <h5 class="gradient-text mb-4">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Informasi Tambahan
+                        </h5>
+                        <div class="row g-4">
+                            <div class="col-md-4 text-center">
+                                <div class="text-primary mb-3">
+                                    <i class="fas fa-eye fa-2x"></i>
+                                </div>
+                                <h6>Ekstraksi Fitur</h6>
+                                <p class="text-muted small">
+                                    Sistem menganalisis histogram warna HSV, statistik RGB, dan fitur tekstur untuk menghasilkan fitur unik dari setiap gambar
+                                </p>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <div class="text-success mb-3">
+                                    <i class="fas fa-tree fa-2x"></i>
+                                </div>
+                                <h6>Random Forest</h6>
+                                <p class="text-muted small">
+                                    Menggunakan ensemble dari multiple pohon keputusan untuk memberikan prediksi yang robust dan akurat untuk berbagai jenis gambar
+                                </p>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <div class="text-info mb-3">
+                                    <i class="fas fa-chart-bar fa-2x"></i>
+                                </div>
+                                <h6>Kompatibilitas</h6>
+                                <p class="text-muted small">
+                                    Mendukung berbagai format gambar (JPEG, PNG, GIF, BMP) dan dapat memproses gambar dari dataset CSV dengan akurat
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Global variables for image handling
+        let imageFormats = ['jpeg', 'jpg', 'png', 'gif', 'bmp', 'webp'];
+        
+        // Animation on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Hide loading indicator initially
+            const loadingIndicator = document.getElementById('imageLoading');
+            if (loadingIndicator) {
+                loadingIndicator.style.display = 'none';
+            }
+            
+            // Animate confidence bar
+            const confidenceBar = document.getElementById('confidenceBar');
+            const confidence = {{ result.confidence if result.confidence else 0 }};
+            
+            if (confidenceBar) {
+                // Set initial width to 0
+                confidenceBar.style.width = '0%';
+                
+                // Animate to actual width
+                setTimeout(() => {
+                    confidenceBar.style.transition = 'width 2s ease-in-out';
+                    confidenceBar.style.width = '100%';
+                }, 500);
+            }
+        });
+        
+        // Enhanced image error handling
+        function handleImageError(img) {
+            console.warn('Failed to load image, trying alternative formats...');
+            const imageData = '{{ result.image if result.image else "" }}';
+            tryAlternativeFormats(img, imageData);
+        }
+        
+        function tryAlternativeFormats(img, imageData) {
+            if (!imageData) {
+                showImagePlaceholder(img);
+                return;
+            }
+            
+            const formats = ['jpeg', 'png', 'gif', 'bmp', 'webp'];
+            let currentFormat = 0;
+            
+            function tryNext() {
+                if (currentFormat >= formats.length) {
+                    showImagePlaceholder(img);
+                    return;
+                }
+                
+                const format = formats[currentFormat];
+                const newSrc = `data:image/${format};base64,${imageData}`;
+                
+                // Create a new image to test
+                const testImg = new Image();
+                testImg.onload = function() {
+                    img.src = newSrc;
+                    handleImageLoad(img);
+                };
+                testImg.onerror = function() {
+                    currentFormat++;
+                    tryNext();
+                };
+                testImg.src = newSrc;
+            }
+            
+            tryNext();
+        }
+        
+        function handleImageLoad(img) {
+            // Hide loading indicator
+            const loadingIndicator = document.getElementById('imageLoading');
+            if (loadingIndicator) {
+                loadingIndicator.style.display = 'none';
+            }
+            
+            // Show image with fade-in effect
+            img.style.opacity = '0';
+            img.style.display = 'block';
+            setTimeout(() => {
+                img.style.transition = 'opacity 0.5s ease-in-out';
+                img.style.opacity = '1';
+            }, 100);
+        }
+        
+        function showImagePlaceholder(img) {
+            const loadingIndicator = document.getElementById('imageLoading');
+            if (loadingIndicator) {
+                loadingIndicator.style.display = 'none';
+            }
+            
+            // Create placeholder
+            const placeholder = document.createElement('div');
+            placeholder.className = 'no-image-placeholder text-center p-4';
+            placeholder.innerHTML = `
+                <i class="fas fa-exclamation-triangle fa-3x text-warning mb-3"></i>
+                <p class="text-muted">Gagal memuat gambar</p>
+                <small class="text-muted">Format gambar mungkin tidak didukung</small>
+            `;
+            
+            img.parentNode.replaceChild(placeholder, img);
+        }
+        
+        function downloadResult() {
+            // Create result data with more comprehensive information
+            const resultData = {
+                filename: '{{ result.filename if result.filename else "unknown" }}',
+                prediction: '{{ result.prediction if result.prediction else "unknown" }}',
+                confidence: {{ result.confidence if result.confidence else 0 }},
+                features_count: {{ result.features_count if result.features_count else 176 }},
+                processing_time: '{{ result.processing_time if result.processing_time else "N/A" }}',
+                timestamp: new Date().toISOString(),
+                model_info: {
+                    algorithm: 'Random Forest',
+                    version: '1.0'
+                }
+            };
+            
+            // Convert to JSON and create download
+            const dataStr = JSON.stringify(resultData, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `classification_result_${Date.now()}.json`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+            
+            // Show success message
+            showAlert('success', 'Hasil berhasil diunduh!', 'fas fa-check-circle');
+        }
+        
+        function showAlert(type, message, icon) {
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
+            alert.style.top = '20px';
+            alert.style.right = '20px';
+            alert.style.zIndex = '9999';
+            alert.style.minWidth = '300px';
+            alert.innerHTML = `
+                <i class="${icon} me-2"></i>
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            document.body.appendChild(alert);
+            
+            // Auto remove after 3 seconds
+            setTimeout(() => {
+                if (alert.parentNode) {
+                    alert.parentNode.removeChild(alert);
+                }
+            }, 3000);
+        }
+        
+        // Enhanced interactive effects
+        document.querySelectorAll('.btn-custom').forEach(btn => {
+            btn.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-2px) scale(1.05)';
+                this.style.transition = 'all 0.3s ease';
+            });
+            
+            btn.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+        
+        // Enhanced image zoom functionality
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('uploaded-image')) {
+                const img = e.target;
+                
+                // Create modal for image zoom
+                const modal = document.createElement('div');
+                modal.className = 'modal fade';
+                modal.id = 'imageModal';
+                modal.innerHTML = `
+                    <div class="modal-dialog modal-xl modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">
+                                    <i class="fas fa-search-plus me-2"></i>
+                                    {{ result.filename if result.filename else 'Gambar' }}
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body text-center p-0">
+                                <img src="${img.src}" class="img-fluid" alt="Zoomed Image" style="max-height: 80vh;">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                    <i class="fas fa-times me-2"></i>Tutup
+                                </button>
+                                <button type="button" class="btn btn-primary" onclick="downloadImage('${img.src}')">
+                                    <i class="fas fa-download me-2"></i>Unduh Gambar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                document.body.appendChild(modal);
+                const modalInstance = new bootstrap.Modal(modal);
+                modalInstance.show();
+                
+                // Remove modal from DOM when hidden
+                modal.addEventListener('hidden.bs.modal', function() {
+                    document.body.removeChild(modal);
+                });
+            }
+        });
+        
+        function downloadImage(imageSrc) {
+            const link = document.createElement('a');
+            link.href = imageSrc;
+            link.download = `image_${Date.now()}.jpg`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            showAlert('info', 'Gambar berhasil diunduh!', 'fas fa-download');
+        }
+        
+        // Add error handling for the entire page
+        window.addEventListener('error', function(e) {
+            console.error('Page error:', e.error);
+            // Don't show error to user unless it's critical
+        });
+        
+        // Performance monitoring for image loading
+        if ('PerformanceObserver' in window) {
+            const observer = new PerformanceObserver((list) => {
+                for (const entry of list.getEntries()) {
+                    if (entry.name.includes('data:image')) {
+                        console.log(`Image load time: ${entry.duration}ms`);
+                    }
+                }
+            });
+            observer.observe({entryTypes: ['resource']});
+        }
+    </script>
+</body>
+</html>

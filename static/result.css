@@ -1,0 +1,508 @@
+/* CSS Warna-warni Cantik untuk Hasil Klasifikasi */
+:root {
+    --magic-purple: #ff69b4; /* Hot pink */
+    --magic-pink: #ff1493; /* Deep pink */
+    --electric-blue: #00ffff; /* Aqua cyan */
+    --sunset-orange: #ff6b6b; /* Coral red */
+    --cosmic-purple: #98fb98; /* Pale green */
+    --rainbow-yellow: #ffff00; /* Bright yellow */
+    --emerald-green: #32cd32; /* Lime green */
+    --coral-pink: #ff69b4; /* Hot pink */
+    --sky-blue: #87ceeb; /* Sky blue */
+    --lavender: #ff69b4; /* Hot pink */
+    --mint-green: #98fb98; /* Pale green */
+    --sunset-red: #ff6347; /* Tomato */
+    
+    /* Gradients Cantik */
+    --gradient-magic: linear-gradient(135deg, #ff69b4 0%, #ff1493 100%);
+    --gradient-sunset: linear-gradient(135deg, #ff6b6b 0%, #ffc0cb 50%, #ffc0cb 100%);
+    --gradient-ocean: linear-gradient(135deg, #00ffff 0%, #87ceeb 100%);
+    --gradient-forest: linear-gradient(135deg, #32cd32 0%, #98fb98 100%);
+    --gradient-cosmic: linear-gradient(135deg, #ff69b4 0%, #ffff00 100%);
+    --gradient-rainbow: linear-gradient(135deg, #ff69b4 0%, #ff1493 25%, #00ffff 50%, #32cd32 75%, #ffff00 100%);
+    --gradient-aurora: linear-gradient(135deg, #98fb98 0%, #ffc0cb 100%);
+    --gradient-fire: linear-gradient(135deg, #ff6b6b 0%, #ffa500 50%, #ffff00 100%);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--gradient-rainbow);
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+    animation: backgroundShift 10s ease-in-out infinite;
+}
+
+@keyframes backgroundShift {
+    0%, 100% { background: var(--gradient-rainbow); }
+    25% { background: var(--gradient-cosmic); }
+    50% { background: var(--gradient-aurora); }
+    75% { background: var(--gradient-ocean); }
+}
+
+/* Background cantik dengan floating elements */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(circle at 10% 20%, rgba(255, 107, 180, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 90% 10%, rgba(135, 206, 235, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 20% 80%, rgba(50, 205, 50, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 90%, rgba(255, 105, 180, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(255, 255, 0, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: -1;
+    animation: floatingBubbles 15s ease-in-out infinite;
+}
+
+@keyframes floatingBubbles {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(180deg); }
+}
+
+/* Floating particles */
+body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(2px 2px at 20px 30px, rgba(255, 255, 255, 0.4), transparent),
+        radial-gradient(2px 2px at 40px 70px, rgba(255, 255, 0, 0.4), transparent),
+        radial-gradient(1px 1px at 90px 40px, rgba(255, 105, 180, 0.4), transparent),
+        radial-gradient(1px 1px at 130px 80px, rgba(135, 206, 235, 0.4), transparent),
+        radial-gradient(2px 2px at 160px 30px, rgba(50, 205, 50, 0.4), transparent);
+    background-repeat: repeat;
+    background-size: 200px 100px;
+    animation: sparkle 20s linear infinite;
+    pointer-events: none;
+    z-index: -1;
+}
+
+@keyframes sparkle {
+    0% { transform: translateY(0px); }
+    100% { transform: translateY(-200px); }
+}
+
+.main-container {
+    position: relative;
+    z-index: 1;
+    padding: 2rem 1rem;
+}
+
+/* Header dengan efek glowing */
+.display-5 {
+    color: white !important;
+    text-shadow: 
+        0 0 10px rgba(255, 255, 255, 0.5),
+        0 0 20px rgba(255, 255, 255, 0.3),
+        0 0 30px rgba(255, 255, 255, 0.2);
+    animation: titleGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes titleGlow {
+    from { text-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 255, 255, 0.3); }
+    to { text-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 0 0 30px rgba(255, 255, 255, 0.5), 0 0 40px rgba(255, 255, 255, 0.3); }
+}
+
+.success-animation {
+    animation: successPulse 2s ease-in-out infinite;
+}
+
+@keyframes successPulse {
+    0%, 100% { transform: scale(1); color: #32cd32; }
+    50% { transform: scale(1.2); color: #98fb98; }
+}
+
+.lead {
+    color: rgba(255, 255, 255, 0.9) !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Animasi masuk */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+    animation: fadeIn 1s ease-out forwards;
+}
+
+.fade-in:nth-child(1) { animation-delay: 0.2s; }
+.fade-in:nth-child(2) { animation-delay: 0.4s; }
+.fade-in:nth-child(3) { animation-delay: 0.6s; }
+
+/* Result Card dengan Glass Morphism Super Cantik */
+.result-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 30px;
+    box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.1),
+        0 0 80px rgba(255, 255, 255, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.5s ease;
+}
+
+.result-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 1s ease;
+}
+
+.result-card:hover::before {
+    left: 100%;
+}
+
+.result-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 
+        0 30px 60px rgba(0, 0, 0, 0.15),
+        0 0 100px rgba(255, 255, 255, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Image Container */
+.image-container {
+    padding: 2rem;
+    background: var(--gradient-aurora);
+    border-radius: 25px;
+    margin: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.image-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, rgba(255, 255, 255, 0.1) 0%, transparent 100%);
+    pointer-events: none;
+}
+
+.uploaded-image {
+    width: 100%;
+    max-height: 400px;
+    object-fit: cover;
+    border-radius: 20px;
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.uploaded-image:hover {
+    transform: scale(1.05) rotate(2deg);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Result Content */
+.result-content {
+    padding: 2rem;
+    background: var(--gradient-cosmic);
+    border-radius: 25px;
+    margin: 1rem;
+    position: relative;
+}
+
+.gradient-text {
+    background: var(--gradient-magic);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 800;
+    animation: gradientShift 3s ease-in-out infinite;
+}
+
+@keyframes gradientShift {
+    0%, 100% { background: var(--gradient-magic); }
+    33% { background: var(--gradient-fire); }
+    66% { background: var(--gradient-forest); }
+}
+
+/* Icon besar dengan animasi */
+.icon-large {
+    font-size: 4rem;
+    animation: iconFloat 3s ease-in-out infinite;
+    text-shadow: 0 0 20px currentColor;
+}
+
+@keyframes iconFloat {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(5deg); }
+}
+
+/* Prediction Badge Super Cantik */
+.prediction-badge {
+    background: var(--gradient-sunset);
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    font-size: 1.5rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin: 1rem 0;
+    box-shadow: 
+        0 15px 35px rgba(255, 105, 180, 0.4),
+        0 5px 15px rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
+    animation: badgePulse 2s ease-in-out infinite;
+}
+
+@keyframes badgePulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.prediction-badge::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.8s ease;
+}
+
+.prediction-badge:hover::before {
+    left: 100%;
+}
+
+/* Stats Card Cantik */
+.stats-card {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.stats-card:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Confidence Bar Super Menarik */
+.confidence-bar {
+    height: 15px;
+    background: var(--gradient-forest);
+    border-radius: 25px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 
+        inset 0 2px 4px rgba(0, 0, 0, 0.2),
+        0 4px 8px rgba(50, 205, 50, 0.3);
+    animation: confidenceGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes confidenceGlow {
+    from { box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2), 0 4px 8px rgba(50, 205, 50, 0.3); }
+    to { box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2), 0 8px 16px rgba(50, 205, 50, 0.5); }
+}
+
+.confidence-bar::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    animation: shimmer 2s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+.confidence-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-weight: bold;
+    font-size: 12px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Alert Cantik */
+.alert {
+    border: none;
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    animation: alertSlideIn 0.5s ease-out;
+}
+
+@keyframes alertSlideIn {
+    from { opacity: 0; transform: translateX(-20px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+.alert-success {
+    background: linear-gradient(135deg, rgba(50, 205, 50, 0.9), rgba(152, 251, 152, 0.9));
+    color: white;
+}
+
+.alert-info {
+    background: linear-gradient(135deg, rgba(135, 206, 235, 0.9), rgba(0, 255, 255, 0.9));
+    color: white;
+}
+
+.alert-warning {
+    background: linear-gradient(135deg, rgba(255, 255, 0, 0.9), rgba(255, 215, 0, 0.9));
+    color: #8b4513;
+}
+
+.alert-danger {
+    background: linear-gradient(135deg, rgba(255, 107, 107, 0.9), rgba(255, 99, 71, 0.9));
+    color: white;
+}
+
+/* Button Super Cantik */
+.btn-custom {
+    border: none;
+    border-radius: 50px;
+    padding: 1rem 2rem;
+    font-weight: 600;
+    font-size: 1rem;
+    margin: 0.5rem;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.btn-primary.btn-custom {
+    background: var(--gradient-magic);
+    color: white;
+}
+
+.btn-success.btn-custom {
+    background: var(--gradient-forest);
+    color: white;
+}
+
+.btn-custom::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.btn-custom:hover::before {
+    left: 100%;
+}
+
+.btn-custom:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive dan Mobile Friendly */
+@media (max-width: 768px) {
+    .main-container {
+        padding: 1rem;
+    }
+    
+    .image-container,
+    .result-content {
+        margin: 0.5rem;
+        padding: 1.5rem;
+    }
+    
+    .prediction-badge {
+        font-size: 1.2rem;
+        padding: 0.8rem 1.5rem;
+    }
+    
+    .icon-large {
+        font-size: 3rem;
+    }
+    
+    .display-5 {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .btn-custom {
+        padding: 0.8rem 1.5rem;
+        font-size: 0.9rem;
+        margin: 0.3rem;
+        display: block;
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+    
+    .prediction-badge {
+        font-size: 1rem;
+        padding: 0.6rem 1.2rem;
+    }
+}
+
+/* Efek khusus untuk elemen yang diklik */
+.clickable {
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.clickable:active {
+    transform: scale(0.95);
+}
+
+/* Loading animation jika diperlukan */
+@keyframes loading {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading-spinner {
+    border: 4px solid rgba(255, 255, 255, 0.1);
+    border-left: 4px solid white;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: loading 1s linear infinite;
+}

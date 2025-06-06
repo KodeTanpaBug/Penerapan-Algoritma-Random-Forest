@@ -1,0 +1,11 @@
+__pycache__/
+*.pycAdd commentMore actions
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.env
+*.log
+*pkl
+*h5

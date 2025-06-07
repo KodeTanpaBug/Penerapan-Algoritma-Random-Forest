@@ -407,5 +407,4 @@ def model_info():
         return render_template('model_info.html', info=None)
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))  # Gunakan port dari Railway
-    app.run(debug=False, host='0.0.0.0', port=port)
+    app.run(debug=True)

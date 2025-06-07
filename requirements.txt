@@ -6,3 +6,4 @@ joblib
 pillow
 pandas
 gunicorn
+matplotlib
